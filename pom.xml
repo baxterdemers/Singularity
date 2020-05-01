@@ -29,6 +29,11 @@
   </modules>
 
   <properties>
+    <dep.basepom-policy.version>6-hubspot-SNAPSHOT</dep.basepom-policy.version>
+    <dep.plugin.compiler.version>3.8.2-hubspot-SNAPSHOT</dep.plugin.compiler.version>
+    <dep.plugin.dependency.version>3.1.2-hubspot-SNAPSHOT</dep.plugin.dependency.version>
+    <dep.error-prone.version>2.3.4-hubspot-SNAPSHOT</dep.error-prone.version>
+    <dep.hubspot-error-prone.version>1.0-SNAPSHOT</dep.hubspot-error-prone.version>
     <aws.sdk.version>1.11.497</aws.sdk.version>
     <baragon.version>0.9.0</baragon.version>
     <basepom.jar.name.format>${singularity.jar.name.format}</basepom.jar.name.format>
@@ -799,6 +804,18 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    <extensions>
+      <extension>
+        <groupId>kr.motd.maven</groupId>
+        <artifactId>os-maven-plugin</artifactId>
+        <version>1.6.0</version>
+      </extension>
+      <extension>
+        <groupId>com.hubspot</groupId>
+        <artifactId>hubspot-maven-extensions</artifactId>
+        <version>1.0-SNAPSHOT</version>
+      </extension>
+    </extensions>
   </build>
 
   <developers>
@@ -822,4 +839,108 @@
     <url>git@github.com:HubSpot/Singularity.git</url>
     <tag>HEAD</tag>
   </scm>
+
+  <profiles>
+    <profile>
+      <id>error-prone</id>
+      <activation>
+        <file>
+          <missing>${basedir}/.error-prone-disabled</missing>
+        </file>
+      </activation>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>com.hubspot</groupId>
+              <artifactId>hubspot-error-prone-maven-plugin</artifactId>
+              <version>${dep.hubspot-error-prone.version}</version>
+            </plugin>
+            <plugin>
+              <groupId>com.hubspot</groupId>
+              <artifactId>annotation-processor-maven-plugin</artifactId>
+              <version>1.0-SNAPSHOT</version>
+            </plugin>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <configuration>
+                <compilerId>hubspot-javac</compilerId>
+                <fork>true</fork>
+                <compilerArgs combine.children="append">
+                  <arg>-XDcompilePolicy=simple</arg>
+                </compilerArgs>
+              </configuration>
+              <dependencies>
+                <dependency>
+                  <groupId>com.hubspot</groupId>
+                  <artifactId>hubspot-javac-compiler</artifactId>
+                  <version>1.0-SNAPSHOT</version>
+                </dependency>
+              </dependencies>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+        <plugins>
+          <plugin>
+            <groupId>com.hubspot</groupId>
+            <artifactId>hubspot-error-prone-maven-plugin</artifactId>
+            <configuration>
+              <betaEnabled>${error-prone.beta.checks.enabled}</betaEnabled>
+              <checkErrorHandlingDisabled>${errorProneDevMode}</checkErrorHandlingDisabled>
+              <customConfig>${error-prone.arg.line}</customConfig>
+              <enableCompileDebugging>${javacRemoteDebugEnabled}</enableCompileDebugging>
+              <enableTestCompileDebugging>${javacRemoteDebugEnabled}</enableTestCompileDebugging>
+              <debugPort>${javacRemoteDebugPort}</debugPort>
+              <exclusionPattern>${error-prone.exclusion.pattern}</exclusionPattern>
+              <overrideGroup>${error-prone.group}</overrideGroup>
+              <disablePreconfiguredChecks>${error-prone.disable.preconfigured.checks}</disablePreconfiguredChecks>
+              <epPatchLocation>${error-prone.patch.location}</epPatchLocation>
+              <epPatchChecks>${error-prone.patch.checks}</epPatchChecks>
+            </configuration>
+            <executions>
+              <execution>
+                <id>set-error-prone-config</id>
+                <goals>
+                  <goal>configure</goal>
+                </goals>
+                <phase>initialize</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>com.hubspot</groupId>
+            <artifactId>annotation-processor-maven-plugin</artifactId>
+            <configuration>
+              <!--
+                This section is injected into our compiler configuration above.
+                By doing this in a plugin we avoid breaking compilation in intellij
+              -->
+              <annotationProcessorPaths>
+                <path>
+                  <groupId>com.google.errorprone</groupId>
+                  <artifactId>error_prone_core</artifactId>
+                  <version>${dep.error-prone.version}</version>
+                </path>
+                <path>
+                  <groupId>com.hubspot</groupId>
+                  <artifactId>hubspot-error-prone-checks</artifactId>
+                  <version>${dep.hubspot-error-prone.version}</version>
+                </path>
+              </annotationProcessorPaths>
+            </configuration>
+            <executions>
+              <execution>
+                <id>augment-annotation-processors</id>
+                <goals>
+                  <goal>execute</goal>
+                </goals>
+                <phase>initialize</phase>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
