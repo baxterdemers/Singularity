@@ -69,13 +69,23 @@ public class SingularityDisasterDataPoint
     return numLostTasks;
   }
 
-  @Schema(description = "A count of active slaves")
+  @Schema(description = "A count of active agents")
   public int getNumActiveSlaves() {
     return numActiveSlaves;
   }
 
-  @Schema(description = "A count of slaves lost since the last data point was collected")
+  @Schema(description = "A count of agents lost since the last data point was collected")
   public int getNumLostSlaves() {
+    return numLostSlaves;
+  }
+
+  @Schema(description = "A count of active agents")
+  public int getNumActiveAgents() {
+    return numActiveSlaves;
+  }
+
+  @Schema(description = "A count of agents lost since the last data point was collected")
+  public int getNumLostAgents() {
     return numLostSlaves;
   }
 

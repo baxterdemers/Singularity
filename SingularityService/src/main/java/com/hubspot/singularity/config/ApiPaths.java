@@ -17,6 +17,7 @@ public class ApiPaths {
   public static final String SANDBOX_RESOURCE_PATH = API_BASE_PATH + "/sandbox";
   public static final String SHUFFLE_RESOURCE_PATH = API_BASE_PATH + "/shuffle";
   public static final String SLAVE_RESOURCE_PATH = API_BASE_PATH + "/slaves";
+  public static final String AGENT_RESOURCE_PATH = API_BASE_PATH + "/agents";
   public static final String STATE_RESOURCE_PATH = API_BASE_PATH + "/state";
   public static final String TASK_RESOURCE_PATH = API_BASE_PATH + "/tasks";
   public static final String TEST_RESOURCE_PATH = API_BASE_PATH + "/test"; // Not implemented in proxy
