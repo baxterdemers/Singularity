@@ -1,68 +1,68 @@
 import { buildApiAction, buildJsonApiAction } from './base';
 
-export const FetchSlaves = buildApiAction(
-  'FETCH_SLAVES',
-  {url: '/slaves'}
+export const FetchAgents = buildApiAction(
+  'FETCH_AGENTS',
+  {url: '/agents'}
 );
 
-export const FreezeSlave = buildJsonApiAction(
-  'FREEZE_SLAVE',
+export const FreezeAgent = buildJsonApiAction(
+  'FREEZE_AGENT',
   'POST',
-  (slaveId, data) => ({
-    url: `/slaves/slave/${slaveId}/freeze`,
+  (agentId, data) => ({
+    url: `/agents/agent/${agentId}/freeze`,
     body: data || {}
   })
 );
 
-export const DecommissionSlave = buildJsonApiAction(
-  'DECOMMISSION_SLAVE',
+export const DecommissionAgent = buildJsonApiAction(
+  'DECOMMISSION_AGENT',
   'POST',
-  (slaveId, data) => ({
-    url: `/slaves/slave/${slaveId}/decommission`,
+  (agentId, data) => ({
+    url: `/agents/agent/${agentId}/decommission`,
     body: data || {}
   })
 );
 
-export const RemoveSlave = buildJsonApiAction(
-  'REMOVE_SLAVE',
+export const RemoveAgent = buildJsonApiAction(
+  'REMOVE_AGENT',
   'DELETE',
-  (slaveId, data) => ({
-    url: `/slaves/slave/${slaveId}`,
+  (agentId, data) => ({
+    url: `/agents/agent/${agentId}`,
     body: data || {}
   })
 );
 
-export const ReactivateSlave = buildJsonApiAction(
-  'ACTIVATE_SLAVE',
+export const ReactivateAgent = buildJsonApiAction(
+  'ACTIVATE_AGENT',
   'POST',
-  (slaveId, data) => ({
-    url: `/slaves/slave/${slaveId}/activate`,
+  (agentId, data) => ({
+    url: `/agents/agent/${agentId}/activate`,
     body: data || {}
   })
 );
 
-export const FetchExpiringSlaveStates = buildApiAction(
-  'FETCH_EXPIRING_SLAVE_STATES',
-  {url: '/slaves/expiring'}
+export const FetchExpiringAgentStates = buildApiAction(
+  'FETCH_EXPIRING_AGENT_STATES',
+  {url: '/agents/expiring'}
 );
 
-export const RemoveExpiringSlaveState = buildJsonApiAction(
-  'REMOVE_EXPIRING_SLAVE_STATE',
+export const RemoveExpiringAgentState = buildJsonApiAction(
+  'REMOVE_EXPIRING_AGENT_STATE',
   'DELETE',
-  (slaveId) => ({
-    url: `/slaves/slave/${slaveId}/expiring`
+  (agentId) => ({
+    url: `/agents/agent/${agentId}/expiring`
   })
 );
 
-export const FetchSlaveUsages = buildApiAction(
-  'FETCH_SLAVE_USAGES',
-  {url : '/usage/slaves'}
+export const FetchAgentUsages = buildApiAction(
+  'FETCH_AGENT_USAGES',
+  {url : '/usage/agents'}
 );
 
-export const ClearInactiveSlaves = buildApiAction(
-  'FETCH_SLAVE_USAGES',
+export const ClearInactiveAgents = buildApiAction(
+  'FETCH_AGENT_USAGES',
   {
     method: 'DELETE',
-    url : '/slaves/dead'
+    url : '/agents/dead'
   }
 );
