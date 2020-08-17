@@ -441,6 +441,9 @@ public class LoadBalancerClientImpl implements LoadBalancerClient {
     final List<UpstreamInfo> upstreams = Lists.newArrayListWithCapacity(tasks.size());
 
     for (SingularityTask task : tasks) {
+      LOG.debug("Task: {}", task);
+      LOG.debug("Mesos task: {}", task.getMesosTask());
+      LOG.debug("Mesos task resources: {}", task.getMesosTask().getResources());
       final Optional<Long> maybeLoadBalancerPort = MesosUtils.getPortByIndex(
         mesosProtosUtils.toResourceList(task.getMesosTask().getResources()),
         task.getTaskRequest().getDeploy().getLoadBalancerPortIndex().orElse(0)
